@@ -1,12 +1,14 @@
 "use client";
-import ShowData from "@/components/Code/ShowData";
-// import Image from "next/image";
+
+import AddData from "@/components/Main/AddData";
+import HeaderText from "@/components/Main/HeaderText";
 
 export default function Home() {
   return (
     <>
       <div>
-        <ShowData />
+        <HeaderText />
+        <AddData />
       </div>
     </>
   );
