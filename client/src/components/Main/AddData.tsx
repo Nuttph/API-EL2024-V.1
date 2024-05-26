@@ -59,6 +59,7 @@ const AddData = () => {
     setList(newList);
   };
 
+  const [format, setFormat] = useState(true);
   return (
     <>
       <div className="flex w-full flex-col px-[40px]">
@@ -91,15 +92,25 @@ const AddData = () => {
                 Add
               </button>
             </div>
-            <textarea
-              id="input-text"
-              placeholder="Descriptions.."
-              value={des}
-              onChange={(e) => setDes(e.target.value)}
-              className="outline-purple-500 transition duration-[5.5s] border-2 rounded-2xl w-[75%] px-[20px] py-[5px] text-[20px] h-[250px] font-medium"
-            />
-            <input type="color" id="id" name="name" value="#ffff" />
-            <input type="color" id="favcolor" name="favcolor" />
+            <div className="flex items-end justify-center w-full gap-2 flex-col mr-[140px]">
+              <textarea
+                id="input-text"
+                placeholder="Descriptions.."
+                value={des}
+                onChange={(e) => setDes(e.target.value)}
+                className="outline-purple-500 transition duration-[5.5s] border-2 rounded-2xl w-[75%] px-[20px] py-[5px] text-[20px] h-[250px] font-medium"
+              />
+              <button
+                className={`border-2 mt-2 px-2 py-1 rounded-xl font-semibold flex items-center justify-center ${
+                  format ? "bg-blue-400" : "bg-pink-400"
+                }`}
+                onClick={() => {
+                  setFormat(!format);
+                }}
+              >
+                Fomat
+              </button>
+            </div>
           </div>
           <div
             className={`${showErr ? "" : "hidden"} text-red-500 font-medium`}
@@ -107,11 +118,15 @@ const AddData = () => {
             Please fill in some information.
           </div>
         </form>
-        <div className="flex flex-col-reverse justify-end gap-[10px] mt-[20px] flex-wrap break-words">
+        <div
+          className={`flex ${
+            format ? "flex-row-reverse justify-end" : "flex-col-reverse"
+          } gap-[10px] mt-[20px] flex-wrap-reverse break-words`}
+        >
           {list.map((item, index) => (
             <div
               key={index}
-              className="py-2 bg-purple-400 rounded-2xl break-words max-w-full relative"
+              className="py-2 bg-purple-400 rounded-2xl break-words md:max-w-fit max-w-full w-full relative"
             >
               <div className="absolute right-[10px] text-[13px] text-gray-800 top-[1px]">
                 {`${getMonthName(
@@ -120,15 +135,21 @@ const AddData = () => {
               </div>
               <div className="bg-purple-400 rounded-2xl px-[15px] break-words max-w-full pr-[120px]">
                 <div className="font-bold text-[17px]">{item.title}</div>
-                <button
-                  onClick={() => handleDelete(index)}
-                  className="absolute right-[10px] top-[25px] text-[20px] text-gray-800"
-                >
-                  <MdCancel />
-                </button>
               </div>
-              <div className="font-bold text-[17px] border-t-2 px-[10px]">
+              <div className="font-bold text-[17px] border-t-2 px-[10px] min-h-[140px]">
                 {item.description}
+              </div>
+              <div className="flex flex-row justify-around mb-2 font-medium">
+                <button className="bg-yellow-300 px-2 w-full">Edit</button>
+                <button
+                  className="bg-red-300 px-2 w-full"
+                  onClick={() => {
+                    handleDelete(index);
+                  }}
+                >
+                  Remove
+                </button>
+                <button className="bg-green-300 px-2 w-full">Finish</button>
               </div>
             </div>
           ))}
