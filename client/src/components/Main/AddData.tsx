@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdCancel } from "react-icons/md";
 
 interface Props {
@@ -12,6 +12,18 @@ const AddData = () => {
   const [list, setList] = useState<Props[]>([]);
   const [showErr, setShowErr] = useState(false);
   const time = new Date();
+
+  useEffect(() => {
+    const storedList = localStorage.getItem("dataList");
+    if (storedList) {
+      setList(JSON.parse(storedList));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("dataList", JSON.stringify(list));
+  }, [list]);
+
   function getMonthName(date: number) {
     const monthNames = [
       "January",
@@ -29,6 +41,7 @@ const AddData = () => {
     ];
     return monthNames[date];
   }
+
   const handleSubmit = () => {
     const textTrim = title.trim();
     if (textTrim.length > 0) {
@@ -39,6 +52,11 @@ const AddData = () => {
     }
     setTitle("");
     setDes("");
+  };
+
+  const handleDelete = (index: number) => {
+    const newList = list.filter((_, i) => i !== index);
+    setList(newList);
   };
 
   return (
@@ -63,6 +81,7 @@ const AddData = () => {
                 className="outline-purple-500 transition duration-[5.5s] border-2 rounded-2xl w-[75%] px-[20px] py-[5px] text-[24px] font-medium"
               />
               <button
+                type="submit"
                 className={`${
                   title.trim().length > 0
                     ? "bg-black hover:bg-purple-900 text-amber-400"
@@ -99,11 +118,14 @@ const AddData = () => {
                   time.getMonth()
                 )} ${time.getDate()} ${time.getFullYear()}`}
               </div>
-              <div
-                key={index}
-                className="bg-purple-400 rounded-2xl px-[15px] break-words max-w-full pr-[120px]"
-              >
+              <div className="bg-purple-400 rounded-2xl px-[15px] break-words max-w-full pr-[120px]">
                 <div className="font-bold text-[17px]">{item.title}</div>
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="absolute right-[10px] top-[25px] text-[20px] text-gray-800"
+                >
+                  <MdCancel />
+                </button>
               </div>
               <div className="font-bold text-[17px] border-t-2 px-[10px]">
                 {item.description}
